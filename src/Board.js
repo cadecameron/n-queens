@@ -79,12 +79,24 @@
     //
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
-      return false; // fixme
+      var result = 0;
+      for (let i = 0; i < this.attributes.n; i++) {
+        if (this.get(rowIndex)[i] === 1) {
+          result++;
+        }
+      }
+      return result > 1;
     },
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
-      return false; // fixme
+      var result = false;
+      for (let i = 0; i < this.get('n'); i++) {
+        if (this.hasRowConflictAt(i)) {
+          result = true;
+        }
+      }
+      return result;
     },
 
 
@@ -94,12 +106,24 @@
     //
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
-      return false; // fixme
+      var result = 0;
+      for (let i = 0; i < this.get('n'); i++) {
+        if (this.get(i)[colIndex] === 1) {
+          result++;
+        }
+      }
+      return result > 1;
     },
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
-      return false; // fixme
+      var result = false;
+      for (let i = 0; i < this.get('n'); i++) {
+        if (this.hasColConflictAt(i)) {
+          result = true;
+        }
+      }
+      return result;
     },
 
 
@@ -109,12 +133,28 @@
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+      var result = 0;
+      var column = majorDiagonalColumnIndexAtFirstRow;
+      for (let row = 0; row < this.get('n'); row++, column++) {
+        if (this._isInBounds(row, column)) {
+          result += this.get(row)[column];
+        }
+      }
+      return result > 1;
     },
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
-      return false; // fixme
+      var result = false;
+      var limit = this.get('n') - 1;
+      for (let column = (this.get('n') - 2) * -1; column < limit; column++ ) {
+        if (this.hasMajorDiagonalConflictAt(column)) {
+          result = true;
+        }
+      }
+
+
+      return result;
     },
 
 
