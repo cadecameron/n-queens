@@ -65,21 +65,17 @@ window.countNRooksSolutions = function(n) {
 
       // place a piece at the current colum in the row
       testBoard.get(row)[column] = 1;
+      var conflict = testBoard.hasAnyRooksConflicts();
 
       // check if there's a conflict in the current Board
-      if (testBoard.hasAnyRooksConflicts()) {
-        // if there is a conflict
-        // remove last piece from Board
-        testBoard.get(row)[column] = 0;
-      } else if (row < n - 1) {
+      if (!conflict && row < n - 1) {
         // if no conflict and not on last row
         // recursively call inner function, passing in row + 1
         placeAndCheckSearch(row + 1);
-      } else {
+      } else if (!conflict) {
         // no conflict AND last row, means its a solution
         solutionCount++;
       }
-
       // remove last piece from Board before continuing row iteration
       testBoard.get(row)[column] = 0;
     }
@@ -93,8 +89,43 @@ window.countNRooksSolutions = function(n) {
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
 window.findNQueensSolution = function(n) {
-  var solution = undefined; //fixme
+  var solution;
+  var solutionFound = false;
 
+  // create a new Board instance using {n: n}
+  var testBoard = new Board({n: n});
+
+  // define an inner function to recursively call for each successful piece placement, that takes a single parameter 'row'
+  var placeAndCheckSearch = function(row) {
+    // iterate through the current row's column elements while solution = undefined
+    for (var column = 0; column < n && !solutionFound; column++) {
+
+      // place a piece at the current colum in the row
+      testBoard.get(row)[column] = 1;
+      var conflict = testBoard.hasAnyQueensConflicts();
+
+      // check if there's a conflict in the current Board
+      if (!conflict && row < n - 1) {
+        // if no conflict and not on last row
+        // recursively call inner function, passing in row + 1
+        placeAndCheckSearch(row + 1);
+      } else if (!conflict) {
+        // no conflict AND last row, means its a solution
+        solution = _.filter(testBoard.attributes, (value, key) => !isNaN(key));
+        solutionFound = true;
+      }
+      // remove last piece from Board before continuing row iteration
+      if (!solutionFound) {
+        testBoard.get(row)[column] = 0;
+      }
+    }
+  };
+
+  // call inner function with row = 0
+  placeAndCheckSearch(0);
+  if (!solutionFound) {
+    solution = _.filter(testBoard.attributes, (value, key) => !isNaN(key));
+  }
   console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution));
   return solution;
 };
