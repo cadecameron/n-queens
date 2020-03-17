@@ -1,7 +1,3 @@
-// This file is a Backbone Model (don't worry about what that means)
-// It's part of the Board Visualizer
-// The only portions you need to work on are the helper functions (below)
-
 (function() {
 
   window.Board = Backbone.Model.extend({
@@ -70,10 +66,6 @@
     |___/\__\__,_|_|   \__| |_| |_|\___|_|  \___(_)
 
  */
-    /*=========================================================================
-    =                 TODO: fill in these Helper Functions                    =
-    =========================================================================*/
-
     // ROWS - run from left to right
     // --------------------------------------------------------------
     //
